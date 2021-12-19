@@ -20,13 +20,11 @@ def main():
     X_train = X_train / 255.
     _,m_train = X_train.shape
 
-    W1, b1, W2, b2 = gradient_descent(X_train, Y_train, 0.10, 500, m)
-
-    test_prediction(0,X_train, W1, b1, W2, b2)
-    test_prediction(1,X_train, W1, b1, W2, b2)
+    W1, b1, W2, b2 = gradient_descent(X_train, Y_train, alpha=0.10, iterations=100, M=m)
 
     dev_predictions = make_predictions(X_dev, W1, b1, W2, b2)
-    get_accuracy(dev_predictions, Y_dev)
+    accuracy= get_accuracy(dev_predictions, Y_dev)
+    print('Accuracy on dev set:', accuracy)
 
 if __name__ == "__main__":
     main()

@@ -52,10 +52,9 @@ def get_predictions(A2):
     return np.argmax(A2, 0)
 
 def get_accuracy(predictions, Y):
-    print(predictions, Y)
     return np.sum(predictions == Y) / Y.size
 
-def gradient_descent(X, Y, alpha, iterations,M):
+def gradient_descent(X, Y, alpha, iterations, M):
     W1, b1, W2, b2 = init_params()
     for i in range(iterations):
         Z1, A1, Z2, A2 = forward_prop(W1, b1, W2, b2, X)
@@ -72,14 +71,14 @@ def make_predictions(X, W1, b1, W2, b2):
     predictions = get_predictions(A2)
     return predictions
 
-def test_prediction(index, X_train, W1, b1, W2, b2):
+def test_prediction(index, X_train, Y_train, W1, b1, W2, b2, M):
     current_image = X_train[:, index, None]
     prediction = make_predictions(X_train[:, index, None], W1, b1, W2, b2)
     label = Y_train[index]
     print("Prediction: ", prediction)
     print("Label: ", label)
 
-    W1, b1, W2, b2 = gradient_descent(X_train, Y_train, 0.10, 500)
+    W1, b1, W2, b2 = gradient_descent(X_train, Y_train, 0.10, 500, M)
 
     current_image = current_image.reshape((28, 28)) * 255
     plt.gray()
