@@ -1,0 +1,32 @@
+import numpy as np
+import pandas as pd
+from matplotlib import pyplot as plt
+from modules import *
+
+def main():
+    data = pd.read_csv('train.csv')
+    data = np.array(data)
+    m, n = data.shape
+    np.random.shuffle(data) # shuffle before splitting into dev and training sets
+
+    data_dev = data[0:1000].T
+    Y_dev = data_dev[0]
+    X_dev = data_dev[1:n]
+    X_dev = X_dev / 255.
+
+    data_train = data[1000:m].T
+    Y_train = data_train[0]
+    X_train = data_train[1:n]
+    X_train = X_train / 255.
+    _,m_train = X_train.shape
+
+    W1, b1, W2, b2 = gradient_descent(X_train, Y_train, 0.10, 500, m)
+
+    test_prediction(0,X_train, W1, b1, W2, b2)
+    test_prediction(1,X_train, W1, b1, W2, b2)
+
+    dev_predictions = make_predictions(X_dev, W1, b1, W2, b2)
+    get_accuracy(dev_predictions, Y_dev)
+
+if __name__ == "__main__":
+    main()
