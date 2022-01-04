@@ -8,6 +8,16 @@ def init_params():
     b2 = np.random.rand(10, 1) - 0.5
     return W1, b1, W2, b2
 
+def bin_dot(A,B):
+    n,_= A.shape
+    sum1= np.sum(np.abs(A))
+    sum2= np.sum(np.abs(B))
+    beta= 1/n * (sum1)
+    alpha= 1/n * (sum2)
+    H= np.sign(A)
+    B= np.sign(B)
+    return alpha*beta*H.dot(B)
+
 def ReLU(Z):
     return np.maximum(Z, 0)
 
@@ -16,9 +26,9 @@ def softmax(Z):
     return A
     
 def forward_prop(W1, b1, W2, b2, X):
-    Z1 = W1.dot(X) + b1
+    Z1 = bin_dot(W1,X) + b1
     A1 = ReLU(Z1)
-    Z2 = W2.dot(A1) + b2
+    Z2 = bin_dot(W2,A1) + b2
     A2 = softmax(Z2)
     return Z1, A1, Z2, A2
 
@@ -34,10 +44,10 @@ def one_hot(Y):
 def backward_prop(Z1, A1, Z2, A2, W1, W2, X, Y,m):
     one_hot_Y = one_hot(Y)
     dZ2 = A2 - one_hot_Y
-    dW2 = 1 / m * dZ2.dot(A1.T)
+    dW2 = 1 / m * bin_dot(dZ2, A1.T)
     db2 = 1 / m * np.sum(dZ2)
-    dZ1 = W2.T.dot(dZ2) * ReLU_deriv(Z1)
-    dW1 = 1 / m * dZ1.dot(X.T)
+    dZ1 = bin_dot(W2.T,dZ2) * ReLU_deriv(Z1)
+    dW1 = 1 / m * bin_dot(dZ1, X.T)
     db1 = 1 / m * np.sum(dZ1)
     return dW1, db1, dW2, db2
 
