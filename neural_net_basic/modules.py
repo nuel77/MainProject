@@ -26,10 +26,15 @@ def softmax(Z):
     return A
     
 def forward_prop(W1, b1, W2, b2, X):
-    Z1 = bin_dot(W1,X) + b1
+    # print("in forward prop", "shape of W1", W1.shape, "shape of X")
+    Z1 = W1.dot(X) + b1
+    # print("z1", Z1.shape)
     A1 = ReLU(Z1)
-    Z2 = bin_dot(W2,A1) + b2
+    # print("A1", A1.shape)
+    Z2 = W2.dot(A1) + b2
+    # print("Z2", Z2.shape)
     A2 = softmax(Z2)
+    # print("A2", A2.shape)
     return Z1, A1, Z2, A2
 
 def ReLU_deriv(Z):
@@ -44,10 +49,10 @@ def one_hot(Y):
 def backward_prop(Z1, A1, Z2, A2, W1, W2, X, Y,m):
     one_hot_Y = one_hot(Y)
     dZ2 = A2 - one_hot_Y
-    dW2 = 1 / m * bin_dot(dZ2, A1.T)
+    dW2 = 1 / m * dZ2.dot(A1.T)
     db2 = 1 / m * np.sum(dZ2)
-    dZ1 = bin_dot(W2.T,dZ2) * ReLU_deriv(Z1)
-    dW1 = 1 / m * bin_dot(dZ1, X.T)
+    dZ1 = W2.T.dot(dZ2) * ReLU_deriv(Z1)
+    dW1 = 1 / m * dZ1.dot(X.T)
     db1 = 1 / m * np.sum(dZ1)
     return dW1, db1, dW2, db2
 
@@ -73,7 +78,7 @@ def gradient_descent(X, Y, alpha, iterations, M):
         if i % 10 == 0:
             print("Iteration: ", i)
             predictions = get_predictions(A2)
-            print(get_accuracy(predictions, Y))
+            print("accuracy:", get_accuracy(predictions, Y))
     return W1, b1, W2, b2
 
 def make_predictions(X, W1, b1, W2, b2):
