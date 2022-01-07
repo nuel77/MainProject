@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 from modules import *
 
 def main():
-    X, y  =datasets.make_blobs(n_samples=16,n_features=16,centers=10,shuffle=True)
+    X, y  =datasets.make_blobs(n_samples=8,n_features=8,centers=10,shuffle=True)
     m,n= X.shape
     print("shape of data:", X.shape, y.shape)
     W1, b1, W2, b2 = gradient_descent(X, y, alpha=0.10, iterations=100, M=m)

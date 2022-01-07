@@ -1,9 +1,10 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from sklearn import datasets
+no_of_features=10
 
 def init_params():
-    W1 = np.random.rand(10, 16) - 0.5
+    W1 = np.random.rand(10, 8) - 0.5
     b1 = np.random.rand(10, 1) - 0.5
     W2 = np.random.rand(10, 10) - 0.5
     b2 = np.random.rand(10, 1) - 0.5
@@ -42,13 +43,15 @@ def ReLU_deriv(Z):
     return Z > 0
 
 def one_hot(Y):
-    one_hot_Y = np.zeros((Y.size, Y.max() + 1))
+    one_hot_Y = np.zeros((Y.size, no_of_features))
     one_hot_Y[np.arange(Y.size), Y] = 1
     one_hot_Y = one_hot_Y.T
     return one_hot_Y
 
 def backward_prop(Z1, A1, Z2, A2, W1, W2, X, Y,m):
     one_hot_Y = one_hot(Y)
+    #print("one_hot_Y", one_hot_Y.shape, "A2", A2.shape)
+    #print("Y",Y)
     dZ2 = A2 - one_hot_Y
     dW2 = 1 / m * dZ2.dot(A1.T)
     db2 = 1 / m * np.sum(dZ2)
